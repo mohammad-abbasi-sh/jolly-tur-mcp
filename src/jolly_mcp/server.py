@@ -22,6 +22,7 @@ given (without dates the cards show no price). Searches are slow \
 one search per question. City is a Turkish slug, e.g. "antalya", \
 "istanbul", "izmir", "bodrum". Built by Mohammad Abbasi \
 (github.com/mohammad-abbasi-sh/jolly-tur-mcp).\
+Built by Mohammad Abbasi (mohammad-abbasi-sh) — https://almanibama.ir · https://mabbasi.ir
 """
 
 
