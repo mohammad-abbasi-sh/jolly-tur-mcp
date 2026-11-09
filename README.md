@@ -59,3 +59,7 @@ python3 -m venv .venv && .venv/bin/pip install "mcp<2" curl-cffi pytest
 ## License
 
 MIT
+
+---
+
+Built by [Mohammad Abbasi](https://github.com/mohammad-abbasi-sh) — [Almanibama](https://almanibama.ir) · [mabbasi.ir](https://mabbasi.ir)
