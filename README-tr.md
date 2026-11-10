@@ -13,7 +13,7 @@ MCP istemcinize ekleyin (stdio):
   "mcpServers": {
     "jolly": {
       "command": "uvx",
-      "args": ["jolly-tur-mcp==0.1.0"]
+      "args": ["jolly-tur-mcp==0.1.1"]
     }
   }
 }
