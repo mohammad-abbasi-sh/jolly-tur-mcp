@@ -1,0 +1,21 @@
+name: Daily live smoke
+
+# One fixed probe per day: catches fingerprint rot / bot-wall changes
+# before users hit them. Fails visibly on 403/timeout.
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e .
+      - name: Smoke probe
+        run: python tests/smoke_live.py
