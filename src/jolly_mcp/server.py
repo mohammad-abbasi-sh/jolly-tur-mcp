@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 import sys
 
 from mcp.server.fastmcp import FastMCP
@@ -26,8 +27,24 @@ Built by Mohammad Abbasi (mohammad-abbasi-sh) — https://almanibama.ir · https
 """
 
 
+_SOURCE = "jollytur.com"
+_DISCLAIMER = "Unofficial read-only data from jollytur.com; verify on the site before acting on it."
+
+
+def _envelope() -> dict:
+    return {
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "source": _SOURCE,
+        "disclaimer": _DISCLAIMER,
+    }
+
+
+def _ok(payload: dict) -> str:
+    return json.dumps({**_envelope(), **payload}, ensure_ascii=False)
+
+
 def _err(e: Exception) -> str:
-    return json.dumps({"error": str(e)}, ensure_ascii=False)
+    return _ok({"error": str(e)})
 
 
 @mcp.tool()
@@ -46,9 +63,7 @@ page: results page (20 hotels/page). hotel_name: optional name filter \
         payload = _http.search_hotels_raw(
             session, f"https://www.jollytur.com/{slug}-otelleri", post, page
         )
-        return json.dumps(
-            _h.parse_search_result(payload, check_in, check_out), ensure_ascii=False
-        )
+        return _ok(_h.parse_search_result(payload, check_in, check_out))
     except (_http.JollyError, ValueError) as e:
         return _err(e)
 
@@ -64,7 +79,7 @@ search results) or a full jollytur.com hotel URL."""
             if hotel_slug.startswith("http")
             else f"https://www.jollytur.com/{hotel_slug.strip('/')}"
         )
-        return json.dumps(_h.parse_hotel_detail(html_text, url), ensure_ascii=False)
+        return _ok(_h.parse_hotel_detail(html_text, url))
     except (_http.JollyError, ValueError) as e:
         return _err(e)
 
@@ -74,9 +89,19 @@ def jolly_list_campaigns() -> str:
     """Current Jolly Tur campaigns from /kampanyalar (title + link)."""
     try:
         camps = _h.parse_campaigns(_http.fetch_campaigns())
-        return json.dumps({"count": len(camps), "campaigns": camps}, ensure_ascii=False)
+        return _ok({"count": len(camps), "campaigns": camps})
     except (_http.JollyError, ValueError) as e:
         return _err(e)
+
+
+@mcp.tool()
+def jolly_health() -> str:
+    """Check whether jollytur.com is reachable right now.
+
+    Returns status ok (HTTP 200), blocked (HTTP 403/429 — bot wall or
+    rate limit) or error, plus the HTTP status and the probed URL.
+    One polite request; it does not fetch any listings."""
+    return _ok(_http.health_check())
 
 
 def main() -> None:
