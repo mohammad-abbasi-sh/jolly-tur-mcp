@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jolly-tur-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Unofficial read-only MCP server for Jolly Tur hotels (jollytur.com) — hotel search, prices, campaigns"
 readme = "README.md"
 license = { text = "MIT" }
