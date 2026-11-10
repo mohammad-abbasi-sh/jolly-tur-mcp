@@ -15,7 +15,7 @@ Add to your MCP client config (stdio):
   "mcpServers": {
     "jolly": {
       "command": "uvx",
-      "args": ["jolly-tur-mcp"]
+      "args": ["jolly-tur-mcp==0.1.0"]
     }
   }
 }
